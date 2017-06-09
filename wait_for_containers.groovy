@@ -1,6 +1,6 @@
 #!/usr/local/bin/groovy
 
-def containers = args[0].split(',')
+def containers = args[1].split(',')
 println "waiting for " + containers + " to be started up and serving"
 
 for (container in containers) {
@@ -10,27 +10,18 @@ for (container in containers) {
 }
 
 private boolean isReachable(container) {
-    boolean isRequestSuccessFul = false
-
-    for (def i = 0; i < 50; i++) {
-        println("trying $container ${i + 1} times")
-
-        def response = ""
-        try {
-            response = new URL(container).text
-            println response
-        } catch (Exception e) {
-            println "request failed"
-        }
-
-        if (response != "") {
-            isRequestSuccessFul = true;
-            break
-        } else {
-            sleep(5000)
-        }
+    def response = ""
+    try {
+        response = new URL(args[0]+"/"+container).text
+        println response
+    } catch (Exception e) {
+        println "request failed"
     }
 
-    return isRequestSuccessFul
+    if (response != "") {
+        return true;
+    }
+
+    return false;
 }
 
