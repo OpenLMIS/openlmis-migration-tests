@@ -81,7 +81,7 @@ while [[ $counter -lt 50 ]]; do
     checkContainers ${BASE_URL} $services_list $counter
 done
 
-echo '============ LOG MESSAGES FROM STARTING NEW CONTAINERS ============'
+echo '============ LOG ERRORS FROM STARTING NEW CONTAINERS ============'
 /usr/local/bin/docker-compose -f docker-compose.new-version.yml exec log sh -c "cat /var/log/messages"
 
 clean

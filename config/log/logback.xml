@@ -4,27 +4,71 @@
     <appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
         <syslogHost>log</syslogHost>
         <facility>LOCAL0</facility>
-        <suffixPattern>[%15.15thread] %level %logger %msg</suffixPattern>
+        <suffixPattern>                [%15.15thread] %level %logger %msg</suffixPattern>
     </appender>
 
-    <logger name="org.openlmis.auth" level="DEBUG" additivity="false">
-        <appender-ref ref="SYSLOG"/>
+    <appender name="SYSLOG_AUTH" class="ch.qos.logback.classic.net.SyslogAppender">
+        <syslogHost>log</syslogHost>
+        <facility>LOCAL0</facility>
+        <suffixPattern>auth            [%15.15thread] %level %logger %msg</suffixPattern>
+    </appender>
+
+    <appender name="SYSLOG_NOTIFICATION" class="ch.qos.logback.classic.net.SyslogAppender">
+        <syslogHost>log</syslogHost>
+        <facility>LOCAL0</facility>
+        <suffixPattern>notification    [%15.15thread] %level %logger %msg</suffixPattern>
+    </appender>
+
+    <appender name="SYSLOG_REFERENCEDATA" class="ch.qos.logback.classic.net.SyslogAppender">
+        <syslogHost>log</syslogHost>
+        <facility>LOCAL0</facility>
+        <suffixPattern>referencedata   [%15.15thread] %level %logger %msg</suffixPattern>
+    </appender>
+
+    <appender name="SYSLOG_REQUISITION" class="ch.qos.logback.classic.net.SyslogAppender">
+        <syslogHost>log</syslogHost>
+        <facility>LOCAL0</facility>
+        <suffixPattern>requisition     [%15.15thread] %level %logger %msg</suffixPattern>
+    </appender>
+
+    <appender name="SYSLOG_FULFILLMENT" class="ch.qos.logback.classic.net.SyslogAppender">
+        <syslogHost>log</syslogHost>
+        <facility>LOCAL0</facility>
+        <suffixPattern>fulfillment     [%15.15thread] %level %logger %msg</suffixPattern>
+    </appender>
+
+    <appender name="SYSLOG_STOCKMANAGEMENT" class="ch.qos.logback.classic.net.SyslogAppender">
+        <syslogHost>log</syslogHost>
+        <facility>LOCAL0</facility>
+        <suffixPattern>stockmanagement [%15.15thread] %level %logger %msg</suffixPattern>
+    </appender>
+
+    <logger name="org.openlmis.auth" level="ERROR" additivity="false">
+        <appender-ref ref="SYSLOG_AUTH"/>
     </logger>
 
-    <logger name="org.openlmis.notification" level="DEBUG" additivity="false">
-        <appender-ref ref="SYSLOG"/>
+    <logger name="org.openlmis.notification" level="ERROR" additivity="false">
+        <appender-ref ref="SYSLOG_NOTIFICATION"/>
     </logger>
 
-    <logger name="org.openlmis.referencedata" level="DEBUG" additivity="false">
-        <appender-ref ref="SYSLOG"/>
+    <logger name="org.openlmis.referencedata" level="ERROR" additivity="false">
+        <appender-ref ref="SYSLOG_REFERENCEDATA"/>
     </logger>
 
-    <logger name="org.openlmis.requisition" level="DEBUG" additivity="false">
-        <appender-ref ref="SYSLOG"/>
+    <logger name="org.openlmis.requisition" level="ERROR" additivity="false">
+        <appender-ref ref="SYSLOG_REQUISITION"/>
+    </logger>
+
+    <logger name="org.openlmis.fulfillment" level="ERROR" additivity="false">
+        <appender-ref ref="SYSLOG_FULFILLMENT"/>
+    </logger>
+
+    <logger name="org.openlmis.stockmanagement" level="ERROR" additivity="false">
+        <appender-ref ref="SYSLOG_STOCKMANAGEMENT"/>
     </logger>
 
     <!-- Define the root logger log level -->
-    <root level="WARN">
+    <root level="ERROR">
         <appender-ref ref="SYSLOG"/>
     </root>
 </configuration>
