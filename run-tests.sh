@@ -7,8 +7,6 @@
 clean() {
     /usr/local/bin/docker-compose -f docker-compose.new-version.yml down --volumes
     /usr/local/bin/docker-compose -f docker-compose.stable-version.yml down --volumes
-    rm docker-compose.stable-version.yml
-    rm docker-compose.new-version.yml
 }
 
 removeService() {
