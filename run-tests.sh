@@ -8,6 +8,7 @@ clean() {
     echo "cleaning..."
     /usr/local/bin/docker-compose -f docker-compose.new-version.yml down --volumes > /dev/null 2> /dev/null
     /usr/local/bin/docker-compose -f docker-compose.stable-version.yml down --volumes > /dev/null 2> /dev/null
+    echo "Finished"
 }
 
 wait_for_services() {
@@ -51,10 +52,14 @@ mkdir -p build
 cp .env build/
 cp -r config build/
 cd build
-echo 'DOWNLOADING DOCKER COMPOSE FOR STABLE VERSION'
-curl https://raw.githubusercontent.com/OpenLMIS/openlmis-ref-distro/${STABLE_VERSION:-v3.1.1}/docker-compose.yml > docker-compose.stable-version.yml
-echo 'DOWNLOADING DOCKER COMPOSE FOR NEW VERSION'
-curl https://raw.githubusercontent.com/OpenLMIS/openlmis-ref-distro/${NEW_VERSION:-master}/docker-compose.yml > docker-compose.new-version.yml
+
+STABLE_VERSION=${STABLE_VERSION:-v3.1.1}
+NEW_VERSION=${NEW_VERSION:-master}
+
+echo "DOWNLOADING DOCKER COMPOSE FOR STABLE VERSION $STABLE_VERSION"
+curl https://raw.githubusercontent.com/OpenLMIS/openlmis-ref-distro/${STABLE_VERSION}/docker-compose.yml > docker-compose.stable-version.yml
+echo "DOWNLOADING DOCKER COMPOSE FOR NEW VERSION $NEW_VERSION"
+curl https://raw.githubusercontent.com/OpenLMIS/openlmis-ref-distro/${NEW_VERSION}/docker-compose.yml > docker-compose.new-version.yml
 
 clean
 /usr/local/bin/docker-compose -f docker-compose.stable-version.yml pull
