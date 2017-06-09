@@ -5,13 +5,9 @@
 ############################################################################
 
 clean() {
-    /usr/local/bin/docker-compose -f docker-compose.new-version.yml down --volumes
-    /usr/local/bin/docker-compose -f docker-compose.stable-version.yml down --volumes
-}
-
-removeService() {
-    /usr/local/bin/docker-compose -f docker-compose.stable-version.yml kill $1 &&
-    /usr/local/bin/docker-compose -f docker-compose.stable-version.yml rm -f $1
+    echo "cleaning..."
+    /usr/local/bin/docker-compose -f docker-compose.new-version.yml down --volumes > /dev/null 2> /dev/null
+    /usr/local/bin/docker-compose -f docker-compose.stable-version.yml down --volumes > /dev/null 2> /dev/null
 }
 
 checkContainers() {
@@ -79,8 +75,12 @@ while [[ $counter -lt 50 ]]; do
     checkContainers ${BASE_URL} $services_list $counter
 done
 
-echo '============ LOG ERRORS FROM STARTING NEW CONTAINERS ============'
-/usr/local/bin/docker-compose -f docker-compose.new-version.yml exec log sh -c "cat /var/log/messages"
+if [[ $test_result -ne 0 ]]; then
+    echo '============ LOG ERRORS FROM STARTING NEW CONTAINERS ============'
+    /usr/local/bin/docker-compose -f docker-compose.new-version.yml exec log sh -c "cat /var/log/messages"
+else
+    echo "MIGRATION TESTS SUCCESS"
+fi
 
 clean
 
