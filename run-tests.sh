@@ -37,7 +37,7 @@ wait_for_services() {
                 test_result=`/usr/local/bin/docker-compose -f docker-compose.new-version.yml exec -T log sh -c "cat /var/log/messages" | grep ERROR | wc -l`
                 if [[ $test_result -ne 0 ]]; then
                     echo '============ LOG ERRORS FROM STARTING NEW CONTAINERS ============'
-                    /usr/local/bin/docker-compose -f docker-compose.new-version.yml exec log sh -c "cat /var/log/messages"
+                    /usr/local/bin/docker-compose -f docker-compose.new-version.yml exec -T log sh -c "cat /var/log/messages"
                     echo "MIGRATION TESTS FAILURE"
                     clean
                     exit 1
