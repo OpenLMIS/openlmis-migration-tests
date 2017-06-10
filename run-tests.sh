@@ -21,14 +21,14 @@ wait_for_services() {
     for service in "${services_array[@]}"
     do
         counter=0
-        while [[ $counter -lt 50 ]]; do
+        while [[ $counter -lt 25 ]]; do
             let counter=counter+1
             echo "trying $service $counter times"
             service_response=`curl ${BASE_URL}/$service 2> /dev/null`
             if [[ $service_response == {* ]]; then
                 break
             fi
-            if [[ $counter == 50 ]]; then
+            if [[ $counter == 25 ]]; then
                 echo "TIMED OUT WAITING FOR SERVICE $service"
                 clean
                 exit 1
