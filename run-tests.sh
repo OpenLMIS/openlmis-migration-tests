@@ -21,25 +21,25 @@ wait_for_services() {
     for service in "${services_array[@]}"
     do
         counter=0
-        while [[ $counter -lt 25 ]]; do
+        while [[ $counter -lt 50 ]]; do
             let counter=counter+1
             echo "trying $service $counter times"
             service_response=`curl http://localhost/$service 2> /dev/null`
             if [[ $service_response == {* ]]; then
                 break
             fi
-            if [[ $counter == 25 ]]; then
+            if [[ $counter == 50 ]]; then
                 echo "TIMED OUT WAITING FOR SERVICE $service"
                 clean
                 exit 1
             fi
             if [[ $1 == "test" ]]; then
-                test_result=`/usr/local/bin/docker-compose -f docker-compose.new-version.yml exec log sh -c "cat /var/log/messages" | grep ERROR | wc -l`
+                test_result=`/usr/local/bin/docker-compose -f docker-compose.new-version.yml exec -T log sh -c "cat /var/log/messages" | grep ERROR | wc -l`
                 if [[ $test_result -ne 0 ]]; then
                     echo '============ LOG ERRORS FROM STARTING NEW CONTAINERS ============'
                     /usr/local/bin/docker-compose -f docker-compose.new-version.yml exec log sh -c "cat /var/log/messages"
                     echo "MIGRATION TESTS FAILURE"
-                    #clean
+                    clean
                     exit 1
                 fi
             fi
