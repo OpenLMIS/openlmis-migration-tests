@@ -24,7 +24,7 @@ wait_for_services() {
         while [[ $counter -lt 25 ]]; do
             let counter=counter+1
             echo "trying $service $counter times"
-            service_response=`curl ${BASE_URL}/$service 2> /dev/null`
+            service_response=`curl http://localhost/$service 2> /dev/null`
             if [[ $service_response == {* ]]; then
                 break
             fi
@@ -66,10 +66,6 @@ clean
 
 echo 'STARTING OLD COMPONENT VERSIONS THAT WILL LOAD OLD DEMO DATA TO DATABASE'
 /usr/local/bin/docker-compose -f docker-compose.stable-version.yml up --build --force-recreate -d
-
-set -o allexport
-source .env
-set +o allexport
 
 wait_for_services
 echo 'REMOVING OLD CONTAINERS EXCEPT DATABASE'
