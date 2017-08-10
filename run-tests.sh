@@ -48,6 +48,18 @@ wait_for_services() {
     done
 }
 
+remove_invalid_lots() {
+  # The following LOTs have incorrect value in tradeItemId column and they
+  # have to be removed before we start new component versions
+  LOTS=('35c81bde-e975-4603-ab3b-5ae1dafe9d33' '639f0bc5-0372-4a0e-9a9d-b0144ceb0474' 'cb0e7132-e364-4143-a996-0c2cbc740bb0' 'd5703c4f-82fd-4fac-8214-ed2eb1094f1a')
+  DB_CONTAINER=$(/usr/local/bin/docker-compose -f docker-compose.stable-version.yml ps | awk '{ print $1 }' | grep db)
+
+  for LOT in "${LOTS[@]}"
+  do
+    /usr/bin/docker exec -e LOT_ID=${LOT} ${DB_CONTAINER} /bin/bash -c "export PGPASSWORD=\${POSTGRES_PASSWORD} && psql \${DATABASE_URL:5} -U\${POSTGRES_USER} -c \"DELETE FROM referencedata.lots WHERE id = '\${LOT_ID}'\""
+  done
+}
+
 mkdir -p build
 cp .env build/
 cp -r config build/
@@ -68,6 +80,7 @@ echo 'STARTING OLD COMPONENT VERSIONS THAT WILL LOAD OLD DEMO DATA TO DATABASE'
 /usr/local/bin/docker-compose -f docker-compose.stable-version.yml up --build --force-recreate -d
 
 wait_for_services
+remove_invalid_lots
 echo 'REMOVING OLD CONTAINERS EXCEPT DATABASE'
 /usr/local/bin/docker-compose -f docker-compose.stable-version.yml stop > /dev/null 2> /dev/null
 docker rm -f `/usr/local/bin/docker-compose -f docker-compose.stable-version.yml ps | awk '{ print $1 }' | grep build | grep -v db | paste -sd " "` > /dev/null 2> /dev/null
