@@ -87,6 +87,12 @@ docker rm -f `/usr/local/bin/docker-compose -f docker-compose.stable-version.yml
 
 echo 'STARTING NEW COMPONENT VERSIONS WITH PRODUCTION FLAG (NO DATA LOSS)'
 export spring_profiles_active=production
+
+if [[ ${STABLE_VERSION} =~ ^v3\.[2-9].* ]]; then
+  mv .env settings.env
+  curl https://raw.githubusercontent.com/OpenLMIS/openlmis-ref-distro/${NEW_VERSION}/.env > .env
+fi
+
 /usr/local/bin/docker-compose -f docker-compose.new-version.yml up -d
 
 wait_for_services test
