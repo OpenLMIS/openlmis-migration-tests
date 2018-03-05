@@ -17,6 +17,12 @@ wait_for_services() {
     services_list=`curl -s 'http://localhost:8500/v1/catalog/services' | sed -e 's/[{}"]/''/g' | awk -v RS=',' -F: '{print $1}' |  grep -v consul | grep -v reference-ui | paste -sd ","`
     IFS=',' read -r -a services_array <<< "$services_list"
 
+    if [ ${#services_array[@]} -eq 0 ]; then
+        echo "service list is empty :("
+        clean
+        exit 1
+    fi
+
     echo "waiting for ${services_array[*]} to be started up and serving"
     for service in "${services_array[@]}"
     do
