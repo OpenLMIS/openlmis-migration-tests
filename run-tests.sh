@@ -103,8 +103,9 @@ export spring_profiles_active=production
 
 if ! [[ ${STABLE_VERSION} =~ ^v3\.[3-9].* ]]; then
   mv .env settings.env
-  curl https://raw.githubusercontent.com/OpenLMIS/openlmis-ref-distro/${NEW_VERSION}/.env > .env
 fi
+
+curl https://raw.githubusercontent.com/OpenLMIS/openlmis-ref-distro/${NEW_VERSION}/.env > .env
 
 /usr/local/bin/docker-compose -f docker-compose.new-version.yml up -d
 
