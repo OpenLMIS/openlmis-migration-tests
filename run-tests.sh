@@ -66,13 +66,20 @@ remove_invalid_lots() {
   done
 }
 
-mkdir -p build
-cp .env build/
-cp -r config build/
-cd build
-
 STABLE_VERSION=${STABLE_VERSION:-v3.1.1}
 NEW_VERSION=${NEW_VERSION:-master}
+
+mkdir -p build
+
+if [[ ${STABLE_VERSION} =~ ^v3\.[3-9].* ]]; then
+  cp .env build/settings.env
+  curl https://raw.githubusercontent.com/OpenLMIS/openlmis-ref-distro/${STABLE_VERSION}/.env > build/.env
+else
+  cp .env build/
+fi
+
+cp -r config build/
+cd build
 
 echo "DOWNLOADING DOCKER COMPOSE FOR STABLE VERSION $STABLE_VERSION"
 curl https://raw.githubusercontent.com/OpenLMIS/openlmis-ref-distro/${STABLE_VERSION}/docker-compose.yml > docker-compose.stable-version.yml
@@ -94,7 +101,7 @@ docker rm -f `/usr/local/bin/docker-compose -f docker-compose.stable-version.yml
 echo 'STARTING NEW COMPONENT VERSIONS WITH PRODUCTION FLAG (NO DATA LOSS)'
 export spring_profiles_active=production
 
-if [[ ${STABLE_VERSION} =~ ^v3\.[2-9].* ]]; then
+if ! [[ ${STABLE_VERSION} =~ ^v3\.[3-9].* ]]; then
   mv .env settings.env
   curl https://raw.githubusercontent.com/OpenLMIS/openlmis-ref-distro/${NEW_VERSION}/.env > .env
 fi
