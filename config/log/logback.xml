@@ -43,27 +43,27 @@
         <suffixPattern>stockmanagement [%15.15thread] %level %logger %msg</suffixPattern>
     </appender>
 
-    <logger name="org.openlmis.auth" level="ERROR" additivity="false">
+    <logger name="org.openlmis.auth" level="INFO" additivity="false">
         <appender-ref ref="SYSLOG_AUTH"/>
     </logger>
 
-    <logger name="org.openlmis.notification" level="ERROR" additivity="false">
+    <logger name="org.openlmis.notification" level="INFO" additivity="false">
         <appender-ref ref="SYSLOG_NOTIFICATION"/>
     </logger>
 
-    <logger name="org.openlmis.referencedata" level="ERROR" additivity="false">
+    <logger name="org.openlmis.referencedata" level="INFO" additivity="false">
         <appender-ref ref="SYSLOG_REFERENCEDATA"/>
     </logger>
 
-    <logger name="org.openlmis.requisition" level="ERROR" additivity="false">
+    <logger name="org.openlmis.requisition" level="INFO" additivity="false">
         <appender-ref ref="SYSLOG_REQUISITION"/>
     </logger>
 
-    <logger name="org.openlmis.fulfillment" level="ERROR" additivity="false">
+    <logger name="org.openlmis.fulfillment" level="INFO" additivity="false">
         <appender-ref ref="SYSLOG_FULFILLMENT"/>
     </logger>
 
-    <logger name="org.openlmis.stockmanagement" level="ERROR" additivity="false">
+    <logger name="org.openlmis.stockmanagement" level="INFO" additivity="false">
         <appender-ref ref="SYSLOG_STOCKMANAGEMENT"/>
     </logger>
 
