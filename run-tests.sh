@@ -43,12 +43,12 @@ wait_for_services() {
                 test_result=`/usr/local/bin/docker-compose -f docker-compose.new-version.yml exec -T log sh -c "cat /var/log/messages" | grep ERROR | wc -l`
                 if [[ $test_result -ne 0 ]]; then
                     echo '============ LOG ERRORS FROM STARTING NEW CONTAINERS ============'
-                    /usr/local/bin/docker-compose -f docker-compose.new-version.yml exec -T log sh -c "cat /var/log/messages"
+                    /usr/local/bin/docker-compose -f docker-compose.new-version.yml exec -T log sh -c "cat /var/log/messages" | grep -v Resource2Db
                     echo "MIGRATION TESTS FAILURE"
                     clean
                     exit 1
                 else
-                    /usr/local/bin/docker-compose -f docker-compose.new-version.yml exec -T log sh -c "cat /var/log/messages"
+                    /usr/local/bin/docker-compose -f docker-compose.new-version.yml exec -T log sh -c "cat /var/log/messages" | grep -v Resource2Db
                 fi
             fi
             sleep 5
@@ -81,16 +81,12 @@ else
 fi
 
 cp -r config build/
-cp build/settings.env build/new-settings.env
 cd build
 
 echo "DOWNLOADING DOCKER COMPOSE FOR STABLE VERSION $STABLE_VERSION"
 curl https://raw.githubusercontent.com/OpenLMIS/openlmis-ref-distro/${STABLE_VERSION}/docker-compose.yml > docker-compose.stable-version.yml
 echo "DOWNLOADING DOCKER COMPOSE FOR NEW VERSION $NEW_VERSION"
 curl https://raw.githubusercontent.com/OpenLMIS/openlmis-ref-distro/${NEW_VERSION}/docker-compose.yml > docker-compose.new-version.yml
-sed -i -e 's/settings.env/new-settings.env/g' docker-compose.new-version.yml
-sed -i '/# spring_profiles_active=production/c\spring_profiles_active=production' new-settings.env
-sed -i '/spring_profiles_active=demo-data,refresh-db/c\# spring_profiles_active=demo-data,refresh-db' new-settings.env
 
 clean
 /usr/local/bin/docker-compose -f docker-compose.stable-version.yml pull
@@ -105,19 +101,16 @@ echo 'REMOVING OLD CONTAINERS EXCEPT DATABASE'
 docker rm -f `/usr/local/bin/docker-compose -f docker-compose.stable-version.yml ps | grep build | grep -v db | awk '{ print $1 }' | paste -sd " "`
 
 echo 'STARTING NEW COMPONENT VERSIONS WITH PRODUCTION FLAG (NO DATA LOSS)'
-export spring_profiles_active=production
+sed -i '/# spring_profiles_active=production/c\spring_profiles_active=production' settings.env
+sed -i '/spring_profiles_active=demo-data,refresh-db/c\# spring_profiles_active=demo-data,refresh-db' settings.env
 
 if ! [[ ${STABLE_VERSION} =~ ^v3\.[3-9].* ]]; then
   mv .env settings.env
 fi
 
 curl https://raw.githubusercontent.com/OpenLMIS/openlmis-ref-distro/${NEW_VERSION}/.env > .env
-sed -i '/OL_REFERENCEDATA_VERSION=12.0.0-SNAPSHOT/c\OL_REFERENCEDATA_VERSION=migration-test' .env
 
-echo "$(<new-settings.env)"
-echo "$(<.env)"
-echo "$(<docker-compose.new-version.yml)"
-/usr/local/bin/docker-compose -f docker-compose.new-version.yml up -d
+/usr/local/bin/docker-compose -f docker-compose.new-version.yml up --no-recreate -d
 
 wait_for_services test
 
