@@ -61,6 +61,12 @@
         <suffixPattern>hapifhir        [%15.15thread] %level %logger %msg</suffixPattern>
     </appender>
 
+    <appender name="SYSLOG_CCE" class="ch.qos.logback.classic.net.SyslogAppender">
+        <syslogHost>log</syslogHost>
+        <facility>LOCAL0</facility>
+        <suffixPattern>cce             [%15.15thread] %level %logger %msg</suffixPattern>
+    </appender>
+
     <logger name="org.openlmis.auth" level="INFO" additivity="false">
         <appender-ref ref="SYSLOG_AUTH"/>
     </logger>
@@ -95,6 +101,10 @@
 
     <logger name="org.openlmis.report" level="INFO" additivity="false">
         <appender-ref ref="SYSLOG_REPORT"/>
+    </logger>
+
+    <logger name="org.openlmis.cce" level="INFO" additivity="false">
+        <appender-ref ref="SYSLOG_CCE"/>
     </logger>
 
     <!-- Define the root logger log level -->
