@@ -85,6 +85,18 @@
         <appender-ref ref="SYSLOG_STOCKMANAGEMENT"/>
     </logger>
 
+    <logger name="org.openlmis.hapifhir" level="INFO" additivity="false">
+        <appender-ref ref="SYSLOG_HAPIFHIR"/>
+    </logger>
+
+    <logger name="org.openlmis.diagnostics" level="INFO" additivity="false">
+        <appender-ref ref="SYSLOG_DIAGNOSTICS"/>
+    </logger>
+
+    <logger name="org.openlmis.report" level="INFO" additivity="false">
+        <appender-ref ref="SYSLOG_REPORT"/>
+    </logger>
+
     <!-- Define the root logger log level -->
     <root level="ERROR">
         <appender-ref ref="SYSLOG"/>
