@@ -43,6 +43,24 @@
         <suffixPattern>stockmanagement [%15.15thread] %level %logger %msg</suffixPattern>
     </appender>
 
+    <appender name="SYSLOG_REPORT" class="ch.qos.logback.classic.net.SyslogAppender">
+        <syslogHost>log</syslogHost>
+        <facility>LOCAL0</facility>
+        <suffixPattern>report          [%15.15thread] %level %logger %msg</suffixPattern>
+    </appender>
+
+    <appender name="SYSLOG_DIAGNOSTICS" class="ch.qos.logback.classic.net.SyslogAppender">
+        <syslogHost>log</syslogHost>
+        <facility>LOCAL0</facility>
+        <suffixPattern>diagnostics     [%15.15thread] %level %logger %msg</suffixPattern>
+    </appender>
+
+    <appender name="SYSLOG_HAPIFHIR" class="ch.qos.logback.classic.net.SyslogAppender">
+        <syslogHost>log</syslogHost>
+        <facility>LOCAL0</facility>
+        <suffixPattern>hapifhir        [%15.15thread] %level %logger %msg</suffixPattern>
+    </appender>
+
     <logger name="org.openlmis.auth" level="INFO" additivity="false">
         <appender-ref ref="SYSLOG_AUTH"/>
     </logger>
