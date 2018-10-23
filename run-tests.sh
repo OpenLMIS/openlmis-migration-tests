@@ -92,8 +92,7 @@ clean
 /usr/local/bin/docker-compose -f docker-compose.stable-version.yml pull
 
 sed -i '/spring_profiles_active=.*/d' settings.env
-echo '' >> settings.env
-echo 'spring_profiles_active=demo-data,refresh-db' >> settings.env
+sed -i "\$aspring_profiles_active=demo-data,refresh-db" settings.env
 
 echo 'STARTING OLD COMPONENT VERSIONS THAT WILL LOAD OLD DEMO DATA TO DATABASE'
 /usr/local/bin/docker-compose -f docker-compose.stable-version.yml up --build --force-recreate -d
@@ -106,8 +105,7 @@ docker rm -f `/usr/local/bin/docker-compose -f docker-compose.stable-version.yml
 
 echo 'STARTING NEW COMPONENT VERSIONS WITH PRODUCTION FLAG (NO DATA LOSS)'
 sed -i '/spring_profiles_active=.*/d' settings.env
-echo '' >> settings.env
-echo 'spring_profiles_active=production' >> settings.env
+sed -i "\$aspring_profiles_active=production" settings.env
 
 if ! [[ ${STABLE_VERSION} =~ ^v3\.[3-9].* ]]; then
   mv .env settings.env
