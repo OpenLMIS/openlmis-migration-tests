@@ -13,7 +13,7 @@ clean() {
 
 wait_for_services() {
     # we need to give fixed time for services registration
-    sleep 5
+    sleep 15
     services_list=`curl -s 'http://localhost:8500/v1/catalog/services' | sed -e 's/[{}"]/''/g' | awk -v RS=',' -F: '{print $1}' |  grep -v consul | grep -v reference-ui | paste -sd ","`
     IFS=',' read -r -a services_array <<< "$services_list"
 
@@ -51,7 +51,7 @@ wait_for_services() {
                     /usr/local/bin/docker-compose -f docker-compose.new-version.yml exec -T log sh -c "cat /var/log/messages" | grep -v Resource2Db
                 fi
             fi
-            sleep 5
+            sleep 15
         done
     done
 }
