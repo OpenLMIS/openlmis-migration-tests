@@ -50,6 +50,8 @@ wait_for_services() {
                 else
                     /usr/local/bin/docker-compose -f docker-compose.new-version.yml exec -T log sh -c "cat /var/log/messages" | grep -v Resource2Db
                 fi
+            elif [[ $1 == "prep" ]]; then
+               /usr/local/bin/docker-compose -f docker-compose.stable-version.yml exec -T log sh -c "cat /var/log/messages" | grep -v Resource2Db
             fi
             sleep 5
         done
@@ -97,7 +99,7 @@ sed -i "\$aspring_profiles_active=demo-data,refresh-db" settings.env
 echo 'STARTING OLD COMPONENT VERSIONS THAT WILL LOAD OLD DEMO DATA TO DATABASE'
 /usr/local/bin/docker-compose -f docker-compose.stable-version.yml up --build --force-recreate -d
 
-wait_for_services
+wait_for_services prep
 remove_invalid_lots
 echo 'REMOVING OLD CONTAINERS EXCEPT DATABASE'
 /usr/local/bin/docker-compose -f docker-compose.stable-version.yml stop > /dev/null 2> /dev/null
