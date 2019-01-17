@@ -107,6 +107,10 @@
         <appender-ref ref="SYSLOG_CCE"/>
     </logger>
 
+    <logger name="org.flywaydb" level="INFO" additivity="false">
+        <appender-ref ref="SYSLOG"/>
+    </logger>
+
     <!-- Define the root logger log level -->
     <root level="ERROR">
         <appender-ref ref="SYSLOG"/>
