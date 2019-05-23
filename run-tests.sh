@@ -46,7 +46,7 @@ wait_for_services() {
                     /usr/local/bin/docker-compose -f docker-compose.new-version.yml exec -T log sh -c "cat /var/log/messages" | grep -v Resource2Db
                     echo "MIGRATION TESTS FAILURE"
                     clean
-                    exit 1
+                    exit 3
                 else
                     /usr/local/bin/docker-compose -f docker-compose.new-version.yml exec -T log sh -c "cat /var/log/messages" | grep -v Resource2Db
                 fi
