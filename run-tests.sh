@@ -115,6 +115,7 @@ fi
 
 curl https://raw.githubusercontent.com/OpenLMIS/openlmis-ref-distro/${NEW_VERSION}/.env > .env
 
+/usr/local/bin/docker-compose -f docker-compose.new-version.yml pull
 /usr/local/bin/docker-compose -f docker-compose.new-version.yml up --no-recreate -d
 
 wait_for_services test
