@@ -75,7 +75,7 @@ NEW_VERSION=${NEW_VERSION:-master}
 
 mkdir -p build
 
-if [[ ${STABLE_VERSION} =~ ^v3\.[3-9].* ]]; then
+if [[ ${STABLE_VERSION} =~ ^v3\.([3-9]|[1-9]\d).* ]]; then
   cp .env build/settings.env
   curl https://raw.githubusercontent.com/OpenLMIS/openlmis-ref-distro/${STABLE_VERSION}/.env > build/.env
 else
