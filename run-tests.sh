@@ -75,7 +75,7 @@ NEW_VERSION=${NEW_VERSION:-master}
 
 mkdir -p build
 
-if [[ ${STABLE_VERSION} =~ ^v3\.([3-9]|[1-9]\d).* ]]; then
+if [[ ${STABLE_VERSION} =~ ^v3\.[3-9]|[0-9]{2}.* ]]; then
   cp .env build/settings.env
   curl https://raw.githubusercontent.com/OpenLMIS/openlmis-ref-distro/${STABLE_VERSION}/.env > build/.env
 else
@@ -109,7 +109,7 @@ echo 'STARTING NEW COMPONENT VERSIONS WITH PRODUCTION FLAG (NO DATA LOSS)'
 sed -i '/spring_profiles_active=.*/d' settings.env
 sed -i "\$aspring_profiles_active=production" settings.env
 
-if ! [[ ${STABLE_VERSION} =~ ^v3\.[3-9].* ]]; then
+if ! [[ ${STABLE_VERSION} =~ ^v3\.[3-9]|[0-9]{2}.* ]]; then
   mv .env settings.env
 fi
 
